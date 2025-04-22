@@ -8,12 +8,13 @@ Original file is located at
 """
 
 import streamlit as st
+import gdown
 import os
 import pickle
-import numpy as np 
+import numpy as np
 
 
-FILE_ID = "1yWcx0waPDpMcU-x0uZDynh1qRf7srSfb"  
+FILE_ID = "1yWcx0waPDpMcU-x0uZDynh1qRf7srSfb"
 MODEL_FILE = "best_model.pkl"
 
 
