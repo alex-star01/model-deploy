@@ -8,7 +8,6 @@ Original file is located at
 """
 
 import streamlit as st
-import gdown
 import os
 import pickle
 import numpy as np 
