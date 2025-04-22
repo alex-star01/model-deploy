@@ -8,11 +8,25 @@ Original file is located at
 """
 
 import streamlit as st
-import numpy as np
+import gdown
+import os
 import pickle
+import numpy as np 
 
-with open('best_model.pkl', 'rb') as f:
+
+FILE_ID = "1yWcx0waPDpMcU-x0uZDynh1qRf7srSfb"  
+MODEL_FILE = "best_model.pkl"
+
+
+if not os.path.exists(MODEL_FILE):
+    with st.spinner("Mengunduh model dari Google Drive..."):
+        url = f"https://drive.google.com/file/d/1yWcx0waPDpMcU-x0uZDynh1qRf7srSfb/view?usp=drive_link"
+        gdown.download(url, MODEL_FILE, quiet=False)
+
+
+with open(MODEL_FILE, 'rb') as f:
     model = pickle.load(f)
+
 
 st.title("Prediksi Pembatalan Booking Hotel")
 
@@ -20,15 +34,11 @@ st.markdown("""
 Masukkan informasi reservasi di bawah untuk memprediksi apakah booking akan **dibatalkan atau tidak**.
 """)
 
-
 lead_time = st.number_input("Lead Time (hari)", min_value=0, max_value=500, value=100)
 adr = st.number_input("Average Daily Rate", min_value=0.0, value=120.0)
 total_of_special_requests = st.slider("Jumlah Special Request", 0, 5, 0)
 is_repeated_guest = st.selectbox("Apakah Tamu Langganan?", [0, 1])
 previous_cancellations = st.number_input("Jumlah Pembatalan Sebelumnya", 0, 10, 0)
-
-
-
 
 if st.button("Prediksi"):
     input_data = np.array([
@@ -39,10 +49,8 @@ if st.button("Prediksi"):
         previous_cancellations,
     ]).reshape(1, -1)
 
-    # Prediksi
     prediction = model.predict(input_data)[0]
 
-    # Tampilkan hasil
     if prediction == 1:
         st.error("⚠️ Booking kemungkinan besar akan DIBATALKAN.")
     else:
